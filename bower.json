@@ -1,0 +1,19 @@
+{
+  "name": "polymer-devise",
+  "version": "0.0.0",
+  "authors": [
+    "Spencer Elliott <me@elliottsj.com>"
+  ],
+  "description": "A Polymer element to interact with Devise authentication",
+  "keywords": "polymer, web-components, devise",
+  "main": "polymer-devise.html",
+  "license": "MIT",
+  "homepage": "https://github.com/elliottsj/polymer-devise/",
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.3.4",
+    "polymer-test-tools": "Polymer/polymer-test-tools#~0.3.3"
+  }
+}

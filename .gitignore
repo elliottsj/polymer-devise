@@ -1,0 +1,5 @@
+# JetBrains IDE files
+.idea
+
+# Bower packages
+bower_components

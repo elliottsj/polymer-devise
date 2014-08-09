@@ -4,6 +4,28 @@ polymer-devise
 A [Polymer][polymer] element to interact with [Devise][devise] authentication. 
 Mimics the functionality of [angular_devise][].
 
+## Requirements
+
+This service requires Devise to respond to JSON. To do that, simply add
+
+```ruby
+# app/controllers/application_controller.rb
+class ApplicationController < ActionController::Base
+  respond_to :html, :json
+  # ...
+end
+```
+
+TODO: Figure out how to do the CSRF token stuff
+
+## Installing
+
+TODO: Register in bower
+
+```bash
+bower install elliottsj/polymer-devise --save
+```
+
 ## Usage
 
 Simple usage with no parameters provided:

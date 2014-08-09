@@ -220,7 +220,14 @@ Then browse to <http://localhost:8000/polymer-devise/>
 
 ## Running tests
 
-TODO
+Start a local web server in the `polymer/` directory and open <http://localhost:8000/polymer-devise/tests/runner.html>:
+
+```bash
+cd polymer/
+python -m http.server
+open 'http://localhost:8000/polymer-devise/tests/runner.html'
+```
+
 
 [polymer]:        http://www.polymer-project.org/
 [devise]:         https://github.com/plataformatec/devise

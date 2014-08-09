@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>polymer-devise</title>
+
+  <script src="../../platform/platform.js"></script>
+  <link rel="import" href="../../polymer-test-tools/tools.html">
+  <script src="../../polymer-test-tools/htmltest.js"></script>
+
+  <link rel="import" href="../polymer-devise.html">
+
+</head>
+<body>
+
+  <polymer-devise id="devise"
+                  loginMethod="GET"
+                  loginPath="/admins/login.json"
+                  logoutMethod="POST"
+                  logoutPath="/user/logout.json"
+                  registerMethod="PATCH"
+                  registerPath="/user/sign_up.json"></polymer-devise>
+
+  <script>
+
+    document.addEventListener('polymer-ready', function() {
+      /*
+       * Configurable properties should be set properly via attributes
+       */
+
+      var devise = document.getElementById('devise');
+
+      assert.strictEqual(devise.loginMethod, 'GET');
+      assert.strictEqual(devise.loginPath, '/admins/login.json');
+      assert.strictEqual(devise.logoutMethod, 'POST');
+      assert.strictEqual(devise.logoutPath, '/user/logout.json');
+      assert.strictEqual(devise.registerMethod, 'PATCH');
+      assert.strictEqual(devise.registerPath, '/user/sign_up.json');
+
+      done();
+    });
+
+  </script>
+
+</body>
+</html>

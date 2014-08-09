@@ -10,10 +10,19 @@
   // Replace these with your own suites of tests.
 
   htmlSuite('polymer-devise', function() {
-    htmlTest('polymer-devise.html');
+    htmlTest('polymer-devise-default-configuration.html');
+    htmlTest('polymer-devise-can-configure.html');
+    htmlTest('polymer-devise-login.html');
   });
 
-  // End sample test suites
+  suite('foo', function () {
+    setup();
+
+    test('bar', function () {
+
+    });
+
+  });
 
   mocha.run();
 

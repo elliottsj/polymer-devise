@@ -10,115 +10,148 @@ Simple usage with no parameters provided:
 
 ```html
 <link rel="import" href="bower_components/polymer-devise/polymer-devise.html">
-<polymer-devise id="devise"></polymer-devise>
-<script src="script.js"><script>
+<polymer-element name="my-element">
+  <template>
+    <polymer-devise id="devise"></polymer-devise>
+  </template>
+  <script src="my-element.js"></script>
+</polymer-element>
 ```
 
 With optional parameters provided (default values shown):
 
 ```html
 <link rel="import" href="bower_components/polymer-devise/polymer-devise.html">
-<polymer-devise id="devise"
-                loginMethod="POST"
-                loginPath="/users/sign_in.json"
-                logoutMethod="DELETE"
-                logoutPath="/users/sign_out.json"
-                registerMethod="POST"
-                registerPath="/users.json"></polymer-devise>
-<script src="script.js"><script>
+<polymer-element name="my-element">
+  <template>
+    <polymer-devise id="devise"
+                    loginMethod="POST"
+                    loginPath="/users/sign_in.json"
+                    logoutMethod="DELETE"
+                    logoutPath="/users/sign_out.json"
+                    registerMethod="POST"
+                    registerPath="/users.json"></polymer-devise>
+  </template>
+  <script src="my-element.js"></script>
+</polymer-element>
+```
+
+With event handlers declared:
+
+```html
+<link rel="import" href="bower_components/polymer-devise/polymer-devise.html">
+<polymer-element name="my-element">
+  <template>
+    <polymer-devise id="devise"
+                    on-devise-login="{{onLogin}}"
+                    on-devise-new-session="{{onNewSession}}"
+                    on-devise-logout="{{onLogout}}"
+                    on-devise-new-registration="{{onNewRegistration}}"></polymer-devise>
+  </template>
+  <script src="my-element.js"></script>
+</polymer-element>
 ```
 
 ### currentUser()
 
 ```javascript
-// script.js
-var devise = document.getElementById('devise');
-
-devise.currentUser().then(function (user) {
-  // User was logged in, or Devise returned
-  // previously authenticated session.
-  console.log(user); // => {id: 1, ect: '...'}
-}, function(error) {
-  // unauthenticated error
+// my-element.js
+Polymer('my-element', {
+  ready: function () {
+    this.$.devise.currentUser().then(function (user) {
+      // User was logged in, or Devise returned
+      // previously authenticated session.
+      console.log(user); // => {id: 1, ect: '...'}
+    }, function(error) {
+      // unauthenticated error
+    });
+  }
 });
 ```
 
 ### isAuthenticated()
 
 ```javascript
-// script.js
-var devise = document.getElementById('devise');
-
-console.log(devise.isAuthenticated()); // => false
-
-// Log in user...
-
-console.log(devise.isAuthenticated()); // => true
+// my-element.js
+Polymer('my-element', {
+  ready: function () {
+    console.log(this.$.devise.isAuthenticated()); // => false
+    
+    // Log in user...
+    
+    console.log(this.$.devise.isAuthenticated()); // => true
+  }
+});
 ```
 
 ### login(creds)
 
 ```javascript
-// script.js
-var devise = document.getElementById('devise');
+// my-element.js
 
 var credentials = {
   email: 'user@domain.com',
   password: 'password1'
 };
 
-Auth.login(credentials).then(function(user) {
-  console.log(user); // => {id: 1, ect: '...'}
-}, function(error) {
-  // Authentication failed...
-});
-
-$scope.$on('devise:login', function(event, currentUser) {
-  // after a login, a hard refresh, a new tab
-});
-
-$scope.$on('devise:new-session', function(event, currentUser) {
-  // user logged in by Auth.login({...})
+Polymer('my-element', {
+  ready: function () {
+    this.$.devise.login(credentials).then(function(user) {
+      console.log(user); // => {id: 1, ect: '...'}
+    }, function(error) {
+      // Authentication failed...
+    });
+  },
+  onLogin: function (event, currentUser, sender) {
+    // after a login, a hard refresh, a new tab
+  },
+  onNewSession: function (event, currentUser, sender) {
+    // user logged in by Auth.login({...})
+  }
 });
 ```
 
 ### logout()
 
 ```javascript
-// script.js
-var devise = document.getElementById('devise');
-
-// Log in user...
-// ...
-Auth.logout().then(function(oldUser) {
-  // alert(oldUser.name + "you're signed out now.");
-}, function(error) {
-  // An error occurred logging out.
-});
-
-$scope.$on('devise:logout', function(event, oldCurrentUser) {
-  // ...
+// my-element.js
+Polymer('my-element', {
+  ready: function () {
+    // Log in user...
+    // ...
+    this.$.devise.logout().then(function(oldUser) {
+      // alert(oldUser.name + "you're signed out now.");
+    }, function(error) {
+      // An error occurred logging out.
+    });
+  },
+  onLogout: function (event, oldCurrentUser, sender) {
+    // ...
+  }
 });
 ```
 
 ### parse(response)
 
-```javascript
-// script.js
-var devise = document.getElementById('devise');
+TODO: Figure out how this works w/ Polymer
 
-// Customize user parsing
-// NOTE: **MUST** return a truth-y expression
-AuthProvider.parse(function(response) {
-    return response.data.user;
+```javascript
+// my-element.js
+Polymer('my-element', {
+  ready: function () {
+    // Customize user parsing
+    // NOTE: **MUST** return a truth-y expression
+    AuthProvider.parse(function(response) {
+        return response.data.user;
+    });
+  }
 });
 ```
 
 ### register(creds)
 
 ```javascript
-// script.js
-var devise = document.getElementById('devise');
+// my-element.js
 
 var credentials = {
   email: 'user@domain.com',
@@ -126,14 +159,17 @@ var credentials = {
   password_confirmation: 'password1'
 };
 
-Auth.register(credentials).then(function(registeredUser) {
-  console.log(registeredUser); // => {id: 1, ect: '...'}
-}, function(error) {
-  // Registration failed...
-});
-
-$scope.$on('devise:new-registration', function(event, user) {
-  // ...
+Polymer('my-element', {
+  ready: function () {
+    this.$.devise.register(credentials).then(function(registeredUser) {
+      console.log(registeredUser); // => {id: 1, ect: '...'}
+    }, function(error) {
+      // Registration failed...
+    });
+  },
+  onNewRegistration: function (event, user, sender) {
+    // ...
+  }
 });
 ```
 

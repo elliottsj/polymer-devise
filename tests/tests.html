@@ -1,25 +1,64 @@
 <link rel="import" href="../../polymer-test-tools/tools.html">
 
 <script src="../../polymer-test-tools/mocha-htmltest.js"></script>
+<script src="../vendor/sinon-1.10.3.js"></script>
 
 <script>
 
   mocha.setup({ui: 'tdd', slow: 1000, timeout: 5000, htmlbase: ''});
 
-  // Below is a set of sample element test suites. 
-  // Replace these with your own suites of tests.
-
-  htmlSuite('polymer-devise', function() {
+  /**
+   * Test that polymer-devise behaves properly when declared in HTML
+   */
+  htmlSuite('HTML tests', function() {
     htmlTest('polymer-devise-default-configuration.html');
     htmlTest('polymer-devise-can-configure.html');
     htmlTest('polymer-devise-global-state.html');
-    htmlTest('polymer-devise-login.html');
   });
 
-  suite('foo', function () {
-    setup();
+  /**
+   * Test that polymer-devise functions properly, creating the element via JavaScript
+   */
+  suite('Service tests', function () {
 
-    test('bar', function () {
+    suite('#login', function () {});
+    suite('#logout', function () {});
+    suite('#register', function () {
+      var devise, requests;
+
+      setup(function () {
+        devise = document.createElement('polymer-devise');
+        debugger;
+        document.body.appendChild(devise);
+
+        var xhr = sinon.useFakeXMLHttpRequest();
+        requests = [];
+        xhr.onCreate = function (xhr) {
+          requests.push(xhr);
+        };
+
+        xhr.restore();
+      });
+
+      teardown(function () {
+
+      });
+
+      test('POSTS to /users.json by default', function () {
+        devise.register(credentials).then(function(registeredUser) {
+          console.log(registeredUser); // => {id: 1, ect: '...'}
+        }, function(error) {
+          // Registration failed...
+        });
+      });
+
+      test('POSTS to the configured path', function () {
+        devise.register(credentials).then(function(registeredUser) {
+          console.log(registeredUser); // => {id: 1, ect: '...'}
+        }, function(error) {
+          // Registration failed...
+        });
+      });
 
     });
 

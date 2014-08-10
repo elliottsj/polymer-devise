@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-ajax/core-ajax.html">
 
 <!--
 Element providing solution to no problem in particular.
@@ -13,6 +14,13 @@ Element providing solution to no problem in particular.
 @homepage https://github.com/elliottsj/polymer-devise/
 -->
 <polymer-element name="polymer-devise">
-  <template></template>
+  <template>
+    <core-ajax id="loginAjax"
+               method="{{loginMethod}}"
+               url="{{loginPath}}"
+               handleAs="json"
+               on-core-response="{{onLoginResponse}}"
+               hidden></core-ajax>
+  </template>
   <script src="polymer-devise.js"></script>
 </polymer-element>

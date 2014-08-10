@@ -1,20 +1,15 @@
 (function () {
   /**
-   * The default paths.
+   * Global values shared between all instances.
+   * Initially contains default HTTP methods and paths
    */
-  var paths = {
-    login: '/users/sign_in.json',
-    logout: '/users/sign_out.json',
-    register: '/users.json'
-  };
-
-  /**
-   * The default HTTP methods to use.
-   */
-  var methods = {
-    login: 'POST',
-    logout: 'DELETE',
-    register: 'POST'
+  var globalValues = {
+    loginmethod: 'POST',
+    loginpath: '/users/sign_in.json',
+    logoutmethod: 'DELETE',
+    logoutpath: '/users/sign_out.json',
+    registermethod: 'POST',
+    registerpath: '/users.json'
   };
 
   /**
@@ -29,12 +24,14 @@
    * Can be swapped with another parsing function
    * using
    *
-   *  angular.module('myModule', ['Devise']).
-   *  config(function(AuthProvider) {
-   *      AuthProvider.parse(function(response) {
-   *          return new User(response.data);
-   *      });
-   *  });
+   * <pre>
+   * angular.module('myModule', ['Devise']).
+   * config(function(AuthProvider) {
+   *     AuthProvider.parse(function(response) {
+   *         return new User(response.data);
+   *     });
+   * });
+   * </pre>
    */
   var _parse = function(response) {
     return response.data;
@@ -48,6 +45,8 @@
      */
     _currentUser: null,
 
+    values: globalValues,
+
     /**
      * The `loginMethod` attribute sets the HTTP method used to login
      *
@@ -55,7 +54,9 @@
      * @type string
      * @default 'POST'
      */
-    loginMethod: 'POST',
+    get loginMethod () {
+      return globalValues.loginmethod;
+    },
 
     /**
      * The `loginPath` attribute sets the path used to login
@@ -64,7 +65,9 @@
      * @type string
      * @default '/users/sign_in.json'
      */
-    loginPath: '/users/sign_in.json',
+    get loginPath () {
+      return globalValues.loginpath;
+    },
 
     /**
      * The `logoutMethod` attribute sets the HTTP method used to logout
@@ -73,7 +76,9 @@
      * @type string
      * @default 'DELETE'
      */
-    logoutMethod: 'DELETE',
+    get logoutMethod () {
+      return globalValues.logoutmethod;
+    },
 
     /**
      * The `logoutPath` attribute sets the path used to logout
@@ -82,7 +87,9 @@
      * @type string
      * @default '/users/sign_out.json'
      */
-    logoutPath: '/users/sign_out.json',
+    get logoutPath () {
+      return globalValues.logoutpath;
+    },
 
     /**
      * The `registerMethod` attribute sets the HTTP method used to register
@@ -91,7 +98,9 @@
      * @type string
      * @default 'POST'
      */
-    registerMethod: 'POST',
+    get registerMethod () {
+      return globalValues.registermethod;
+    },
 
     /**
      * The `registerPath` attribute sets the path used to register
@@ -100,12 +109,16 @@
      * @type string
      * @default '/users.json'
      */
-    registerPath: '/users.json',
+    get registerPath () {
+      return globalValues.registerpath
+    },
 
-    ready: function() {
-      // Ready is a lifecycle callback.
-      // You can do setup work in here.
-      // More info: http://www.polymer-project.org/docs/polymer/polymer.html#lifecyclemethods
+    ready: function () {
+      // Overwrite global values with attributes
+      for (var i = 0; i < this.attributes.length; i++) {
+        var attr = this.attributes[i];
+        globalValues[attr.name] = attr.value;
+      }
     },
 
     /**

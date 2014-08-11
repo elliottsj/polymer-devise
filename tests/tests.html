@@ -22,34 +22,57 @@
   suite('Service tests', function () {
 
     suite('#login', function () {});
+
     suite('#logout', function () {});
+
     suite('#register', function () {
-      var devise, requests;
+      var xhr,
+          devise,
+          requests;
 
       setup(function () {
         devise = document.createElement('polymer-devise');
-        debugger;
         document.body.appendChild(devise);
 
-        var xhr = sinon.useFakeXMLHttpRequest();
+        xhr = sinon.useFakeXMLHttpRequest();
         requests = [];
         xhr.onCreate = function (xhr) {
           requests.push(xhr);
         };
-
-        xhr.restore();
       });
 
       teardown(function () {
-
+        xhr.restore();
       });
 
       test('POSTS to /users.json by default', function () {
-        devise.register(credentials).then(function(registeredUser) {
+        var credentials = {
+          email: 'user@domain.com',
+          password: 'password1',
+          password_confirmation: 'password1'
+        };
+
+        // Call #register()
+        devise.register(credentials).then(function (registeredUser) {
           console.log(registeredUser); // => {id: 1, ect: '...'}
-        }, function(error) {
+        }, function (error) {
           // Registration failed...
         });
+
+        assert.lengthOf(requests.length, 1, 'a request has been made');
+        assert.equal(requests[0].method, 'POST', 'the request is using POST');
+        assert.equal(requests[0].url, '/users.json', 'the request is using the correct default path');
+
+        var requestBody;
+        try {
+          requestBody = JSON.parse(requests[0].requestBody);
+        } catch (e) {
+          assert.fail(e, credentials, e.message);
+        }
+
+        assert.equal(requestBody.user, credentials, 'the request body should match the passed credentials');
+
+        requests[0].respond(200, null, {id: 1, name: 'test', email: 'user@domain.com'});
       });
 
       test('POSTS to the configured path', function () {

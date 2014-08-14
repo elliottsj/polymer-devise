@@ -1,7 +1,10 @@
 <link rel="import" href="../../polymer-test-tools/tools.html">
 
 <script src="../../polymer-test-tools/mocha-htmltest.js"></script>
+<script src="../../chai-as-promised/lib/chai-as-promised.js"></script>
 <script src="../vendor/sinon-1.10.3.js"></script>
+
+<link rel="import" href="../polymer-devise.html">
 
 <script>
 
@@ -45,7 +48,7 @@
         xhr.restore();
       });
 
-      test('POSTS to /users.json by default', function () {
+      test('POSTS to /users.json by default', function (done) {
         var credentials = {
           email: 'user@domain.com',
           password: 'password1',
@@ -53,32 +56,32 @@
         };
 
         // Call #register()
-        devise.register(credentials).then(function (registeredUser) {
-          console.log(registeredUser); // => {id: 1, ect: '...'}
-        }, function (error) {
-          // Registration failed...
-        });
+        assert.becomes(devise.register(credentials), {
+          id: 1,
+          name: 'test',
+          email: 'user@domain.com'
+        }, 'resolves with registered user').notify(done);
 
-        assert.lengthOf(requests.length, 1, 'a request has been made');
-        assert.equal(requests[0].method, 'POST', 'the request is using POST');
-        assert.equal(requests[0].url, '/users.json', 'the request is using the correct default path');
+        assert.lengthOf(requests, 1,
+            'a request has been made');
+        assert.equal(requests[0].method, 'POST',
+            'the request is using POST');
+        assert.equal(requests[0].url, '/users.json',
+            'the request is using the correct default path');
+        assert.deepEqual(requests[0].requestBody, {user: credentials},
+            'the request body should match the passed credentials');
 
-        var requestBody;
-        try {
-          requestBody = JSON.parse(requests[0].requestBody);
-        } catch (e) {
-          assert.fail(e, credentials, e.message);
-        }
-
-        assert.equal(requestBody.user, credentials, 'the request body should match the passed credentials');
-
-        requests[0].respond(200, null, {id: 1, name: 'test', email: 'user@domain.com'});
+        requests[0].respond(200, null, '{"id": 1, "name": "test", "email": "user@domain.com"}');
       });
 
       test('POSTS to the configured path', function () {
-        devise.register(credentials).then(function(registeredUser) {
+        // Set a custom path
+        devise.setAttribute('registerPath', '/user/sign_up.json');
+
+        // Call #register()
+        devise.register(credentials).then(function (registeredUser) {
           console.log(registeredUser); // => {id: 1, ect: '...'}
-        }, function(error) {
+        }, function (error) {
           // Registration failed...
         });
       });

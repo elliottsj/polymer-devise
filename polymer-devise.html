@@ -18,9 +18,11 @@ Element providing solution to no problem in particular.
     <core-ajax id="loginAjax"
                method="{{loginMethod}}"
                url="{{loginPath}}"
-               handleAs="json"
-               on-core-response="{{onLoginResponse}}"
-               hidden></core-ajax>
+               handleAs="json"></core-ajax>
+    <core-ajax id="registerAjax"
+               method="{{registerMethod}}"
+               url="{{registerPath}}"
+               handleAs="json"></core-ajax>
   </template>
   <script src="polymer-devise.js"></script>
 </polymer-element>

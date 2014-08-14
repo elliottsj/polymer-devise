@@ -17,6 +17,8 @@
    */
   var ignoreAuth = false;
 
+  var _currentUser;
+
   /**
    * The parsing function used to turn a $http
    * response into a "user".
@@ -33,8 +35,8 @@
    * });
    * </pre>
    */
-  var _parse = function(response) {
-    return response.data;
+  var _parse = function(detail) {
+    return detail.response;
   };
 
   Polymer('polymer-devise', {
@@ -206,12 +208,38 @@
      * @returns {Promise} A $http promise that will be resolved or
      *                  rejected by the server.
      */
-    register: function(creds) {
-      creds = creds || {};
-      return $http(httpConfig('register', {user: creds}))
-          .then(service.parse)
-          .then(save)
-          .then(broadcast('new-registration'));
+    register: function (creds) {
+      var self = this,
+          ajax = this.$.registerAjax;
+
+      return new Promise(function (resolve, reject) {
+        ajax.body = {user: creds || {}};
+
+        ajax.addEventListener('core-response', function (event) {
+          // Remove this event handler once it's triggered
+          event.currentTarget.removeEventListener(event.type, arguments.callee);
+          resolve(event.detail);
+        });
+
+        ajax.addEventListener('core-error', function (event) {
+          // Remove this event handler once it's triggered
+          event.currentTarget.removeEventListener(event.type, arguments.callee);
+          var detail = event.detail;
+          reject('failed');
+        });
+
+        ajax.go();
+      })
+      .then(this.parse)
+      .then(_save)
+      .then(function () {
+        
+      });
+
+//      return $http(httpConfig('register', {user: creds}))
+//          .then(service.parse)
+//          .then(save)
+//          .then(broadcast('new-registration'));
     },
 
     /**

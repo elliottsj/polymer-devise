@@ -233,7 +233,7 @@
       .then(this.parse)
       .then(_save)
       .then(function () {
-        
+
       });
 
 //      return $http(httpConfig('register', {user: creds}))

@@ -24,9 +24,93 @@
    */
   suite('Service tests', function () {
 
-    suite('#login', function () {});
+    suite('#login', function () {
+      var xhr,
+          devise,
+          requests;
 
-    suite('#logout', function () {});
+      setup(function () {
+        devise = document.createElement('polymer-devise');
+        document.body.appendChild(devise);
+
+        xhr = sinon.useFakeXMLHttpRequest();
+        requests = [];
+        xhr.onCreate = function (xhr) {
+          requests.push(xhr);
+        };
+      });
+
+      teardown(function () {
+        xhr.restore();
+      });
+
+      test('POSTS to /users/sign_in.json by default', function (done) {
+
+      });
+
+      test('POSTS to the configured path', function () {
+
+      });
+
+      test('Uses the configured HTTP method', function (done) {
+
+      });
+
+      test('Rejects with an error message upon failing to login', function (done) {
+
+      });
+
+      test('Fires "login" upon successful login', function (done) {
+
+      });
+
+      test('Fires "new-session" upon restoring an existing server session', function (done) {
+
+      });
+
+    });
+
+    suite('#logout', function () {
+      var xhr,
+          devise,
+          requests;
+
+      setup(function () {
+        devise = document.createElement('polymer-devise');
+        document.body.appendChild(devise);
+
+        xhr = sinon.useFakeXMLHttpRequest();
+        requests = [];
+        xhr.onCreate = function (xhr) {
+          requests.push(xhr);
+        };
+      });
+
+      teardown(function () {
+        xhr.restore();
+      });
+
+      test('DELETES to /users/sign_out.json by default', function (done) {
+
+      });
+
+      test('DELETES to the configured path', function () {
+
+      });
+
+      test('Uses the configured HTTP method', function (done) {
+
+      });
+
+      test('Rejects with an error message upon failing to logout', function (done) {
+
+      });
+
+      test('Fires "logout" upon successful logout', function (done) {
+
+      });
+
+    });
 
     suite('#register', function () {
       var xhr,
@@ -84,6 +168,18 @@
         }, function (error) {
           // Registration failed...
         });
+      });
+
+      test('Uses the configured HTTP method', function (done) {
+
+      });
+
+      test('Rejects with an error message upon failing to register', function (done) {
+
+      });
+
+      test('Fires "new-registration" upon successful registration', function (done) {
+
       });
 
     });

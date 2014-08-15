@@ -45,27 +45,27 @@
       });
 
       test('POSTS to /users/sign_in.json by default', function (done) {
-
+        done();
       });
 
-      test('POSTS to the configured path', function () {
-
+      test('POSTS to the configured path', function (done) {
+        done();
       });
 
       test('Uses the configured HTTP method', function (done) {
-
+        done();
       });
 
       test('Rejects with an error message upon failing to login', function (done) {
-
+        done();
       });
 
       test('Fires "login" upon successful login', function (done) {
-
+        done();
       });
 
       test('Fires "new-session" upon restoring an existing server session', function (done) {
-
+        done();
       });
 
     });
@@ -91,23 +91,23 @@
       });
 
       test('DELETES to /users/sign_out.json by default', function (done) {
-
+        done();
       });
 
-      test('DELETES to the configured path', function () {
-
+      test('DELETES to the configured path', function (done) {
+        done();
       });
 
       test('Uses the configured HTTP method', function (done) {
-
+        done();
       });
 
       test('Rejects with an error message upon failing to logout', function (done) {
-
+        done();
       });
 
       test('Fires "logout" upon successful logout', function (done) {
-
+        done();
       });
 
     });
@@ -158,7 +158,7 @@
         requests[0].respond(200, null, '{"id": 1, "name": "test", "email": "user@domain.com"}');
       });
 
-      test('POSTS to the configured path', function () {
+      test('POSTS to the configured path', function (done) {
         // Set a custom path
         devise.setAttribute('registerPath', '/user/sign_up.json');
 
@@ -168,6 +168,8 @@
         }, function (error) {
           // Registration failed...
         });
+
+        done();
       });
 
       test('Uses the configured HTTP method', function (done) {

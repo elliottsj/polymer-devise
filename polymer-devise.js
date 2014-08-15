@@ -19,6 +19,7 @@
 
   var _currentUser;
 
+
   /**
    * The parsing function used to turn a $http
    * response into a "user".
@@ -37,6 +38,11 @@
    */
   var _parse = function(detail) {
     return detail.response;
+  };
+
+  var _save = function (user) {
+    _currentUser = user;
+    return user;
   };
 
   Polymer('polymer-devise', {
@@ -232,8 +238,9 @@
       })
       .then(this.parse)
       .then(_save)
-      .then(function () {
-
+      .then(function (user) {
+        self.fire('new-registration', user);
+        return user;
       });
 
 //      return $http(httpConfig('register', {user: creds}))

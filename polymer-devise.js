@@ -219,7 +219,7 @@
           ajax = this.$.registerAjax;
 
       return new Promise(function (resolve, reject) {
-        ajax.body = {user: creds || {}};
+        ajax.body = JSON.stringify({user: creds || {}});
 
         ajax.addEventListener('core-response', function (event) {
           // Remove this event handler once it's triggered

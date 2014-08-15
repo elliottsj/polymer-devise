@@ -152,7 +152,7 @@
             'the request is using POST');
         assert.equal(requests[0].url, '/users.json',
             'the request is using the correct default path');
-        assert.deepEqual(requests[0].requestBody, {user: credentials},
+        assert.deepEqual(requests[0].requestBody, '{"user":{"email":"user@domain.com","password":"password1","password_confirmation":"password1"}}',
             'the request body should match the passed credentials');
 
         requests[0].respond(200, null, '{"id": 1, "name": "test", "email": "user@domain.com"}');

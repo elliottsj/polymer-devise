@@ -2,7 +2,7 @@
 
 <script src="../../polymer-test-tools/mocha-htmltest.js"></script>
 <script src="../../chai-as-promised/lib/chai-as-promised.js"></script>
-<script src="../vendor/sinon-1.10.3.js"></script>
+<script src="../vendor/sinon-master.js"></script>
 
 <link rel="import" href="../polymer-devise.html">
 
@@ -152,8 +152,6 @@
             'the request is using POST');
         assert.equal(requests[0].url, '/users.json',
             'the request is using the correct default path');
-        assert.isUndefined(requests[0].requestHeaders['content-type'],
-            'the request has no "content-type" (lowercase) header defined');
         assert.isDefined(requests[0].requestHeaders['Content-Type'],
             'the request has a Content-Type header');
         assert.include(requests[0].requestHeaders['Content-Type'], 'application/json',

@@ -7,6 +7,13 @@
 <link rel="import" href="../polymer-devise.html">
 
 <script>
+(function () {
+
+  function getValueForKey(obj, key) {
+    for (var k in obj)
+      if (k.toLowerCase() === key.toLowerCase())
+        return obj[k];
+  }
 
   mocha.setup({ui: 'tdd', slow: 1000, timeout: 5000, htmlbase: ''});
 
@@ -152,9 +159,9 @@
             'the request is using POST');
         assert.equal(requests[0].url, '/users.json',
             'the request is using the correct default path');
-        assert.isDefined(requests[0].requestHeaders['Content-Type'],
+        assert.isDefined(getValueForKey(requests[0].requestHeaders, 'Content-Type'),
             'the request has a Content-Type header');
-        assert.include(requests[0].requestHeaders['Content-Type'], 'application/json',
+        assert.include(getValueForKey(requests[0].requestHeaders, 'Content-Type'), 'application/json',
             'the request has Content-Type: application/json');
         assert.deepEqual(requests[0].requestBody, '{"user":{"email":"user@domain.com","password":"password1","password_confirmation":"password1"}}',
             'the request body should match the passed credentials');
@@ -194,4 +201,5 @@
 
   mocha.run();
 
+}());
 </script>

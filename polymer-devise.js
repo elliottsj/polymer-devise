@@ -121,12 +121,27 @@
       return globalValues.registerpath
     },
 
+    /**
+     * Lifecycle callback when the element has been fully prepared
+     */
     ready: function () {
       // Overwrite global values with attributes
       for (var i = 0; i < this.attributes.length; i++) {
         var attr = this.attributes[i];
         globalValues[attr.name] = attr.value;
       }
+    },
+
+    /**
+     * Lifecycle callback when an attribute is changed.
+     *
+     * @param attrName
+     * @param oldValue
+     * @param newValue
+     */
+    attributeChanged: function (attrName, oldValue, newValue) {
+      // Update global value
+      globalValues[attrName] = newValue;
     },
 
     /**
@@ -230,8 +245,7 @@
         ajax.addEventListener('core-error', function (event) {
           // Remove this event handler once it's triggered
           event.currentTarget.removeEventListener(event.type, arguments.callee);
-          var detail = event.detail;
-          reject('failed');
+          reject(JSON.parse(event.detail.xhr.responseText));
         });
 
         ajax.go();
@@ -242,11 +256,6 @@
         self.fire('new-registration', user);
         return user;
       });
-
-//      return $http(httpConfig('register', {user: creds}))
-//          .then(service.parse)
-//          .then(save)
-//          .then(broadcast('new-registration'));
     },
 
     /**

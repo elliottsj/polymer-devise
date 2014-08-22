@@ -13,8 +13,8 @@
     "**/.*"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.3.4",
-    "polymer-test-tools": "Polymer/polymer-test-tools#~0.3.3",
+    "polymer": "Polymer/polymer#~0.3.5",
+    "polymer-test-tools": "Polymer/polymer-test-tools#~0.3.5",
     "core-ajax": "Polymer/core-ajax#~0.3.5",
     "chai-as-promised": "~4.1.1"
   }

@@ -11,7 +11,7 @@
 
   function getValueForKey(obj, key) {
     for (var k in obj)
-      if (k.toLowerCase() === key.toLowerCase())
+      if (obj.hasOwnProperty(k) && k.toLowerCase() === key.toLowerCase())
         return obj[k];
   }
 
@@ -124,6 +124,9 @@
           devise,
           requests;
 
+      /*
+       * Before each test, create a <polymer-devise> element and prepare FakeXMLHttpRequest
+       */
       setup(function () {
         devise = document.createElement('polymer-devise');
         document.body.appendChild(devise);
@@ -135,6 +138,9 @@
         };
       });
 
+      /*
+       * After each test, restore the native XMLHttpRequest
+       */
       teardown(function () {
         xhr.restore();
       });
@@ -170,29 +176,102 @@
       });
 
       test('POSTS to the configured path', function (done) {
-        // Set a custom path
+        // Set a custom path via an attribute change
         devise.setAttribute('registerPath', '/user/sign_up.json');
 
-        // Call #register()
-        devise.register(credentials).then(function (registeredUser) {
-          console.log(registeredUser); // => {id: 1, ect: '...'}
-        }, function (error) {
-          // Registration failed...
-        });
+        var credentials = {
+          email: 'user@domain.com',
+          password: 'password1',
+          password_confirmation: 'password1'
+        };
 
-        done();
+        // Call #register()
+        assert.becomes(devise.register(credentials), {
+          id: 1,
+          name: 'test',
+          email: 'user@domain.com'
+        }, 'resolves with registered user').notify(done);
+
+        assert.lengthOf(requests, 1,
+            'a request has been made');
+        assert.equal(requests[0].url, '/user/sign_up.json',
+            'the request is using the correct default path');
+
+        requests[0].respond(200, null, '{"id": 1, "name": "test", "email": "user@domain.com"}');
       });
 
       test('Uses the configured HTTP method', function (done) {
+        // Set a custom HTTP method via an attribute change
+        devise.setAttribute('registerMethod', 'PATCH');
 
+        var credentials = {
+          email: 'user@domain.com',
+          password: 'password1',
+          password_confirmation: 'password1'
+        };
+
+        // Call #register()
+        assert.becomes(devise.register(credentials), {
+          id: 1,
+          name: 'test',
+          email: 'user@domain.com'
+        }, 'resolves with registered user').notify(done);
+
+        assert.lengthOf(requests, 1,
+            'a request has been made');
+        assert.equal(requests[0].method, 'PATCH',
+            'the request is using PATCH');
+
+        requests[0].respond(200, null, '{"id": 1, "name": "test", "email": "user@domain.com"}');
       });
 
       test('Rejects with an error message upon failing to register', function (done) {
+        var credentials = {
+          email: 'user@domain.com',
+          password: 'password1',
+          password_confirmation: 'password1'
+        };
 
+        // Call #register()
+        assert.isRejected(devise.register(credentials), {
+          id: 1,
+          name: 'test',
+          email: 'user@domain.com'
+        }, {
+          "errors": {
+            "email": ["can't be blank"],
+            "password": ["can't be blank"]
+          }
+        }, 'rejects with the error object provided by the server').notify(done);
+
+        requests[0].respond(422, null, '{"errors":{"email":["can\'t be blank"],"password":["can\'t be blank"]}}');
       });
 
       test('Fires "new-registration" upon successful registration', function (done) {
+        var credentials = {
+          email: 'user@domain.com',
+          password: 'password1',
+          password_confirmation: 'password1'
+        };
 
+        var spy = sinon.spy();
+        devise.addEventListener('new-registration', spy);
+
+        // Call #register()
+        devise.register(credentials).then(function () {
+          sinon.assert.calledOnce(spy);
+          sinon.assert.calledWith(spy, {
+            id: 1,
+            name: 'test',
+            email: 'user@domain.com'
+          });
+          done();
+        });
+
+        assert.lengthOf(requests, 1,
+            'a request has been made');
+
+        requests[0].respond(200, null, '{"id": 1, "name": "test", "email": "user@domain.com"}');
       });
 
     });

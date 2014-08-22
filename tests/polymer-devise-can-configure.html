@@ -13,13 +13,21 @@
 </head>
 <body>
 
-  <polymer-devise id="devise"
+  <polymer-devise id="devise1"
                   loginMethod="GET"
                   loginPath="/admins/login.json"
                   logoutMethod="POST"
                   logoutPath="/user/logout.json"
                   registerMethod="PATCH"
                   registerPath="/user/sign_up.json"></polymer-devise>
+
+  <polymer-devise id="devise2"
+                  loginmethod="GET"
+                  loginpath="/admins/login.json"
+                  logoutmethod="POST"
+                  logoutpath="/user/logout.json"
+                  registermethod="PATCH"
+                  registerpath="/user/sign_up.json"></polymer-devise>
 
   <script>
 
@@ -28,14 +36,24 @@
        * Configurable properties should be set properly via attributes
        */
 
-      var devise = document.getElementById('devise');
+      var devise1 = document.getElementById('devise1');
 
-      assert.strictEqual(devise.loginMethod, 'GET');
-      assert.strictEqual(devise.loginPath, '/admins/login.json');
-      assert.strictEqual(devise.logoutMethod, 'POST');
-      assert.strictEqual(devise.logoutPath, '/user/logout.json');
-      assert.strictEqual(devise.registerMethod, 'PATCH');
-      assert.strictEqual(devise.registerPath, '/user/sign_up.json');
+      assert.strictEqual(devise1.loginMethod, 'GET');
+      assert.strictEqual(devise1.loginPath, '/admins/login.json');
+      assert.strictEqual(devise1.logoutMethod, 'POST');
+      assert.strictEqual(devise1.logoutPath, '/user/logout.json');
+      assert.strictEqual(devise1.registerMethod, 'PATCH');
+      assert.strictEqual(devise1.registerPath, '/user/sign_up.json');
+
+
+      var devise2 = document.getElementById('devise1');
+
+      assert.strictEqual(devise2.loginMethod, 'GET');
+      assert.strictEqual(devise2.loginPath, '/admins/login.json');
+      assert.strictEqual(devise2.logoutMethod, 'POST');
+      assert.strictEqual(devise2.logoutPath, '/user/logout.json');
+      assert.strictEqual(devise2.registerMethod, 'PATCH');
+      assert.strictEqual(devise2.registerPath, '/user/sign_up.json');
 
       done();
     });

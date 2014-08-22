@@ -258,14 +258,18 @@
         devise.addEventListener('new-registration', spy);
 
         // Call #register()
-        devise.register(credentials).then(function () {
-          sinon.assert.calledOnce(spy);
-          sinon.assert.calledWith(spy, {
+        assert.isFulfilled(devise.register(credentials)).then(function () {
+          assert.isTrue(spy.calledOnce, 'the "new-registration" callback was called');
+          assert.lengthOf(spy.args[0], 1, 'the "new-registration" callback was called with one argument');
+          assert.deepEqual(spy.args[0][0].detail, {
             id: 1,
             name: 'test',
             email: 'user@domain.com'
-          });
+          }, 'the "new-registration" callback was called with user data in event.detail');
+        }).then(function () {
           done();
+        }, function (error) {
+          done(error);
         });
 
         assert.lengthOf(requests, 1,

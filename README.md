@@ -1,7 +1,7 @@
-polymer-devise
+ABANDONED: polymer-devise
 ==============
 
-*NOTE: This project is incomplete and abandoned.*
+**NOTE: This project is incomplete and abandoned.**
 
 A [Polymer][polymer] element to interact with [Devise][devise] authentication. 
 Mimics the functionality of [angular_devise][].
